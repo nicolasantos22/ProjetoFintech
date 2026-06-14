@@ -1,0 +1,7 @@
+/* style.css — complemento mínimo
+   Apenas a transição da sidebar,
+   que o Tailwind CDN não gera para propriedade 'left' */
+
+#sidebar {
+  transition: left 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+}

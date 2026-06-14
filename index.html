@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto Fintech</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand':       '#1a5c2a',
+            'brand-mid':   '#2d7a3e',
+            'brand-entry': '#22c55e',
+            'brand-light': '#c8e6c9',
+            'brand-bg':    '#e8f5e9',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-brand-bg font-sans text-gray-800 min-h-screen">
+
+  <!-- ============================================================
+       SIDEBAR (menu lateral — implementação futura)
+  ============================================================ -->
+  <aside id="sidebar"
+    class="sidebar fixed top-0 left-0 h-full bg-white z-50 shadow-2xl flex flex-col"
+    style="width:280px; left:-280px;">
+
+    <div class="flex items-center gap-3 px-5 py-5 bg-brand text-white">
+      <button id="sidebarClose" aria-label="Fechar menu"
+        class="flex items-center justify-center w-10 h-10 rounded-xl
+               bg-white/10 hover:bg-white/25 active:bg-white/40
+               transition-colors text-2xl cursor-pointer border-0 text-white">
+        <i class="ri-close-line"></i>
+      </button>
+      <span class="font-bold text-base tracking-wide">Menu</span>
+    </div>
+
+    <nav class="p-6 flex-1">
+      <p class="text-sm text-gray-400 italic leading-relaxed">
+        Menu lateral será desenvolvido em breve.
+      </p>
+    </nav>
+  </aside>
+
+  <!-- Overlay -->
+  <div id="sidebarOverlay"
+    class="fixed inset-0 bg-black/40 z-40 opacity-0 pointer-events-none transition-opacity duration-200">
+  </div>
+
+  <!-- ============================================================
+       APP WRAPPER
+  ============================================================ -->
+  <div class="max-w-3xl mx-auto min-h-screen flex flex-col">
+
+    <!-- ── HEADER ── -->
+    <header class="bg-brand px-4 py-3 sm:px-6 sm:py-4
+                   flex items-center justify-between sticky top-0 z-30">
+      <div class="flex items-center gap-3">
+        <button id="profileBtn" aria-label="Abrir menu"
+          class="w-11 h-11 rounded-full border-2 border-white/40 bg-white/10
+                 text-white text-xl flex items-center justify-center
+                 hover:bg-white/20 hover:border-white/80
+                 active:scale-95 transition-all duration-150 cursor-pointer flex-shrink-0">
+          <i class="ri-user-3-line"></i>
+        </button>
+        <span class="text-white font-semibold text-base sm:text-lg leading-tight">
+          Olá, Nicolas
+        </span>
+      </div>
+      <div class="text-white font-extrabold text-xs sm:text-sm
+                  text-right leading-tight tracking-widest uppercase">
+        PROJETO<br/>FINTECH
+      </div>
+    </header>
+
+    <!-- ── MAIN ── -->
+    <main class="flex-1 px-4 pt-5 pb-10 sm:px-6 sm:pt-7 flex flex-col gap-6 sm:gap-8">
+
+      <!-- ── SALDO CONSOLIDADO ── -->
+      <section class="flex items-center gap-2 sm:gap-3">
+
+        <button aria-label="Mês anterior"
+          class="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full
+                 border-2 border-gray-300 text-gray-500 text-xl sm:text-2xl
+                 flex items-center justify-center bg-transparent
+                 hover:border-brand-mid hover:text-brand-mid
+                 active:scale-95 transition-all duration-150 cursor-pointer">
+          <i class="ri-arrow-left-s-line"></i>
+        </button>
+
+        <!-- Card -->
+        <div class="flex-1 bg-white rounded-2xl border-2 border-gray-200
+                    shadow-md overflow-hidden">
+
+          <!-- Linha superior: label + mês -->
+          <div class="px-4 pt-4 pb-2 sm:px-5 sm:pt-4">
+            <p class="text-[11px] sm:text-xs font-medium text-gray-400
+                      uppercase tracking-wider">Saldo consolidado</p>
+            <p class="text-base sm:text-lg font-bold text-gray-800 mt-0.5">
+              Junho 2026
+            </p>
+          </div>
+
+          <!-- Linha inferior: valor + olho -->
+          <div class="px-4 pb-4 sm:px-5 flex items-center justify-between gap-3">
+            <div id="balanceValue"
+              class="text-base sm:text-lg font-bold text-brand-mid
+                     bg-brand-bg border-2 border-brand-light
+                     rounded-full px-3 py-1.5 sm:px-4 sm:py-2
+                     whitespace-nowrap tracking-wide flex-1 text-center">
+              + R$ 5.350,00
+            </div>
+            <button id="toggleVisibility" aria-label="Ocultar saldo"
+              class="flex-shrink-0 w-9 h-9 rounded-full border-2 border-gray-200
+                     text-gray-400 text-lg flex items-center justify-center bg-transparent
+                     hover:border-brand-mid hover:text-brand-mid
+                     active:scale-95 transition-all duration-150 cursor-pointer">
+              <i id="eyeIcon" class="ri-eye-line"></i>
+            </button>
+          </div>
+        </div>
+
+        <button aria-label="Próximo mês"
+          class="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full
+                 border-2 border-gray-300 text-gray-500 text-xl sm:text-2xl
+                 flex items-center justify-center bg-transparent
+                 hover:border-brand-mid hover:text-brand-mid
+                 active:scale-95 transition-all duration-150 cursor-pointer">
+          <i class="ri-arrow-right-s-line"></i>
+        </button>
+      </section>
+
+      <!-- ── ENTRADAS E SAÍDAS ──
+           Mobile  → 1 coluna (Entradas em cima, Saídas embaixo)
+           Desktop → 2 colunas lado a lado
+      -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-5">
+
+        <!-- ══ ENTRADAS ══ -->
+        <section class="flex flex-col gap-3">
+
+          <!-- Cabeçalho da seção -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-9 h-9 rounded-full bg-brand-entry text-white
+                           flex items-center justify-center text-xl flex-shrink-0">
+                <i class="ri-arrow-right-up-line"></i>
+              </span>
+              <h2 class="text-lg sm:text-xl font-bold text-gray-800">Entradas</h2>
+            </div>
+            <button class="bg-brand text-white text-xs sm:text-sm font-semibold
+                           rounded-full px-3 py-2 sm:px-4 shadow-md
+                           hover:opacity-85 active:scale-95
+                           transition-all duration-150 cursor-pointer border-0">
+              Adicionar +
+            </button>
+          </div>
+
+          <!-- Lista de entradas -->
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+
+            <!-- Salário -->
+            <div class="flex items-center gap-3 px-4 py-3.5
+                        border-b border-gray-100 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-money-dollar-circle-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Salário · 05/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Pagamento mensal
+                </span>
+              </div>
+              <span class="text-sm font-bold text-brand-mid whitespace-nowrap flex-shrink-0">
+                + R$ 6.800,00
+              </span>
+            </div>
+
+            <!-- Freelance -->
+            <div class="flex items-center gap-3 px-4 py-3.5
+                        border-b border-gray-100 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-computer-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Freelance · 10/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Projeto site institucional
+                </span>
+              </div>
+              <span class="text-sm font-bold text-brand-mid whitespace-nowrap flex-shrink-0">
+                + R$ 1.200,00
+              </span>
+            </div>
+
+            <!-- Investimentos -->
+            <div class="flex items-center gap-3 px-4 py-3.5 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-line-chart-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Investimentos · 15/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Rendimento CDB
+                </span>
+              </div>
+              <span class="text-sm font-bold text-brand-mid whitespace-nowrap flex-shrink-0">
+                + R$ 350,00
+              </span>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ══ SAÍDAS ══ -->
+        <section class="flex flex-col gap-3">
+
+          <!-- Cabeçalho da seção -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-9 h-9 rounded-full bg-red-600 text-white
+                           flex items-center justify-center text-xl flex-shrink-0">
+                <i class="ri-arrow-right-down-line"></i>
+              </span>
+              <h2 class="text-lg sm:text-xl font-bold text-gray-800">Saídas</h2>
+            </div>
+            <button class="bg-red-600 text-white text-xs sm:text-sm font-semibold
+                           rounded-full px-3 py-2 sm:px-4 shadow-md
+                           hover:opacity-85 active:scale-95
+                           transition-all duration-150 cursor-pointer border-0">
+              Adicionar +
+            </button>
+          </div>
+
+          <!-- Lista de saídas -->
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+
+            <!-- Alimentação -->
+            <div class="flex items-center gap-3 px-4 py-3.5
+                        border-b border-gray-100 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-shopping-basket-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Alimentação · 03/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Hortifruti do bairro
+                </span>
+              </div>
+              <span class="text-sm font-bold text-red-600 whitespace-nowrap flex-shrink-0">
+                - R$ 180,00
+              </span>
+            </div>
+
+            <!-- Energia elétrica -->
+            <div class="flex items-center gap-3 px-4 py-3.5
+                        border-b border-gray-100 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-flashlight-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Contas · 08/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Energia elétrica
+                </span>
+              </div>
+              <span class="text-sm font-bold text-red-600 whitespace-nowrap flex-shrink-0">
+                - R$ 220,00
+              </span>
+            </div>
+
+            <!-- Combustível -->
+            <div class="flex items-center gap-3 px-4 py-3.5
+                        border-b border-gray-100 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-car-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Transporte · 12/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Combustível
+                </span>
+              </div>
+              <span class="text-sm font-bold text-red-600 whitespace-nowrap flex-shrink-0">
+                - R$ 300,00
+              </span>
+            </div>
+
+            <!-- Streaming -->
+            <div class="flex items-center gap-3 px-4 py-3.5
+                        border-b border-gray-100 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-film-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Lazer · 17/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Streaming mensal
+                </span>
+              </div>
+              <span class="text-sm font-bold text-red-600 whitespace-nowrap flex-shrink-0">
+                - R$ 55,00
+              </span>
+            </div>
+
+            <!-- Aluguel -->
+            <div class="flex items-center gap-3 px-4 py-3.5 active:bg-gray-50 transition-colors">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50
+                          flex items-center justify-center text-gray-500 text-xl flex-shrink-0">
+                <i class="ri-home-4-line"></i>
+              </div>
+              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide truncate">
+                  Moradia · 20/06
+                </span>
+                <span class="text-sm font-semibold text-gray-800 truncate">
+                  Aluguel
+                </span>
+              </div>
+              <span class="text-sm font-bold text-red-600 whitespace-nowrap flex-shrink-0">
+                - R$ 2.045,00
+              </span>
+            </div>
+
+          </div>
+        </section>
+
+      </div><!-- /grid -->
+    </main>
+  </div><!-- /app-wrapper -->
+
+  <script>
+    // ── Sidebar ──
+    const profileBtn     = document.getElementById('profileBtn');
+    const sidebar        = document.getElementById('sidebar');
+    const sidebarClose   = document.getElementById('sidebarClose');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar() {
+      sidebar.style.left = '0';
+      sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      sidebarOverlay.classList.add('opacity-100');
+    }
+    function closeSidebar() {
+      sidebar.style.left = '-280px';
+      sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
+      sidebarOverlay.classList.remove('opacity-100');
+    }
+
+    profileBtn.addEventListener('click', openSidebar);
+    sidebarClose.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // ── Toggle visibilidade do saldo ──
+    const toggleBtn  = document.getElementById('toggleVisibility');
+    const eyeIcon    = document.getElementById('eyeIcon');
+    const balanceVal = document.getElementById('balanceValue');
+    const realValue  = '+ R$ 5.350,00';
+    let hidden = false;
+
+    toggleBtn.addEventListener('click', () => {
+      hidden = !hidden;
+      balanceVal.textContent = hidden ? '• • • • •' : realValue;
+      eyeIcon.className      = hidden ? 'ri-eye-off-line' : 'ri-eye-line';
+    });
+  </script>
+
+</body>
+</html>
