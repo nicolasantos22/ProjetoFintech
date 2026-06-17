@@ -1,7 +1,275 @@
-/* style.css — complemento mínimo
-   Apenas a transição da sidebar,
-   que o Tailwind CDN não gera para propriedade 'left' */
+/* ── Importação da fonte Inter ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-#sidebar {
-  transition: left 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+
+/* ── Reset base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ============================================================
+   COMPONENTES REUTILIZÁVEIS
+   ============================================================ */
+
+/* ── Círculo de ícone padrão (transações verdes/neutros) ── */
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 2px solid #e5e7eb;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* ── Círculo de ícone roxo (Investimentos) ── */
+.icon-circle-inv {
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  border: 2px solid #ddd6fe;
+  background-color: #f5f3ff;
+  color: #6d28d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+/* ── Círculo de ícone roxo pequeno (aportes dentro de Saídas) ── */
+.icon-circle-inv-sm {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 2px solid #ddd6fe;
+  background-color: #f5f3ff;
+  color: #6d28d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+/* ── Rótulo de categoria roxo (aportes dentro de Saídas) ── */
+.cat-label-inv {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6d28d9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Círculo de ícone azul (Objetivos) ── */
+.icon-circle-obj {
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  border: 2px solid #bfdbfe;
+  background-color: #eff6ff;
+  color: #2563a8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+/* ── Texto de categoria (linha pequena acima da descrição) ── */
+.cat-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Texto de descrição principal ── */
+.desc-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Valor positivo (entradas) ── */
+.val-income {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #2d7a3e;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Valor negativo (saídas) ── */
+.val-expense {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #dc2626;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   HOVER STATES E TRANSIÇÕES
+   ============================================================ */
+
+/* ── Linhas de transação ── */
+.transaction-row {
+  transition: background-color 0.15s ease;
+}
+.transaction-row:hover {
+  background-color: #f9fafb;
+}
+
+/* ── Ícone de perfil ── */
+.perfil-btn {
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+.perfil-btn:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.05);
+}
+
+/* ── Setas de navegação do saldo ── */
+.nav-arrow {
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.nav-arrow:hover {
+  border-color: #2d7a3e;
+  color: #2d7a3e;
+  background-color: rgba(45, 122, 62, 0.07);
+}
+
+/* ── Botão Adicionar — Entradas (verde) ── */
+.btn-income {
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-income:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.btn-income:active { transform: translateY(0); }
+
+/* ── Botão Adicionar — Saídas (vermelho) ── */
+.btn-expense {
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-expense:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.btn-expense:active { transform: translateY(0); }
+
+/* ── Botão Ver todos — Investimentos (roxo) ── */
+.btn-ver-inv {
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-ver-inv:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.btn-ver-inv:active { transform: translateY(0); }
+
+/* ── Botão Adicionar — Objetivos (azul) ── */
+.btn-add-obj {
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-add-obj:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.btn-add-obj:active { transform: translateY(0); }
+
+/* ── Botão Ver todos — Objetivos (azul) ── */
+.btn-ver-obj {
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-ver-obj:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.btn-ver-obj:active { transform: translateY(0); }
+
+
+/* ============================================================
+   BARRAS DE PROGRESSO
+   ============================================================ */
+
+.barra-entrada,
+.barra-saida {
+  transition: width 0.6s ease;
+}
+
+
+/* ============================================================
+   SOMBRA SUTIL NOS CARDS
+   ============================================================ */
+.bg-white.rounded-2xl,
+.bg-white.rounded-xl {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ============================================================
+   TEXTO DO SALDO
+   ============================================================ */
+.saldo-valor {
+  letter-spacing: 0.02em;
+}
+
+.text-label {
+  letter-spacing: 0.06em;
+}
+
+
+/* ============================================================
+   RESPONSIVIDADE EXTRA — telas muito pequenas (< 360px)
+   ============================================================ */
+@media (max-width: 360px) {
+  .saldo-valor {
+    font-size: 0.82rem;
+    padding: 6px 10px;
+  }
+
+  .transaction-row {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .icon-circle,
+  .icon-circle-inv,
+  .icon-circle-obj {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
 }
